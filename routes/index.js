@@ -8,7 +8,7 @@ router.get('/',(req, res, next)=>{
 })
 
 //customer dashboard
-router.get('/dashboard', (req, res)=>{
+router.get('/packages', (req, res)=>{
     res.render('main');
 });
 
