@@ -1,6 +1,6 @@
 const express = require ('express');
 const router = express.Router();
-const { ensureauthenticated } = require('../config/auth');
+const { ensureAuthenticated } = require('../config/auth');
 
 //welcome page
 router.get('/',(req, res, next)=>{
@@ -8,8 +8,28 @@ router.get('/',(req, res, next)=>{
 })
 
 //customer dashboard
-router.get('/packages', (req, res)=>{
+router.get('/main', ensureAuthenticated , (req, res)=>{
     res.render('main');
+});
+
+//packages
+router.get('/packs', ensureAuthenticated , (req, res, next)=>{
+    res.render('packages')
+});
+
+//treks and waterfalls
+router.get('/tandw', ensureAuthenticated , (req, res)=>{
+    res.render('tandw');
+});
+
+//temples
+router.get('/temples', ensureAuthenticated , (req, res)=>{
+    res.render('temples');
+});
+
+//admindashboard
+router.get('/admindashb', ensureAuthenticated , (req, res)=>{
+    res.render('admin');
 });
 
 module.exports = router;
