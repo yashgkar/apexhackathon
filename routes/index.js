@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Booking = require('../models/NewBooking.js');
+const User = require('../models/User.js');
 
 //welcome page
 router.get('/', (req, res, next) => {
@@ -62,6 +63,28 @@ router.get('/tandw', ensureAuthenticated, (req, res) => {
 router.get('/temples', ensureAuthenticated, (req, res) => {
     res.render('temples');
 });
+
+//my bookings
+router.get('/admin', ensureAuthenticated, (req, res) => {
+    Booking.find((err, data) => {
+        res.render('admin', {
+            details: data
+        });
+    });
+    /*try {
+        data = await Booking.find({ email: req.user.email });
+        res.render('admin', {
+            details: data
+        });
+    } catch (err) {
+        console.log(err);
+    }
+*/
+
+
+});
+
+
 
 //admindashboard
 router.get('/admindashb', ensureAuthenticated, (req, res) => {
