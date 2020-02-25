@@ -59,6 +59,6 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/packs', require('./routes/packages'));
 
-const PORT = process.env.PORT || 5004;
+const PORT = process.env.PORT || 5006;
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
