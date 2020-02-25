@@ -43,54 +43,54 @@ router.post('/register', (req, res) => {
         });
     } else {
         //validation passed
-        User.findOne({email : email})
-        .then(user =>{
-            if(user){
-                //user exists
-                errors.push({msg: 'Email is already registered'});
-                res.render('register', {
-                    errors,
-                    name,
-                    email,
-                    password,
-                    password2
-                });
-            } else {
-                const newUser = new User({
-                    name: name,
-                    email,
-                    password
-                });
-                
-                //hash password
-                bcrypt.genSalt(10, (err, salt)=> {
-                    bcrypt.hash(newUser.password, salt, (err, hash)=>{
-                        if(err) throw err;
+        User.findOne({ email: email })
+            .then(user => {
+                if (user) {
+                    //user exists
+                    errors.push({ msg: 'Email is already registered' });
+                    res.render('register', {
+                        errors,
+                        name,
+                        email,
+                        password,
+                        password2
+                    });
+                } else {
+                    const newUser = new User({
+                        name: name,
+                        email,
+                        password
+                    });
 
-                        //set password to hash
-                        newUser.password = hash;
-                        newUser.save()
-                        .then(user=>{
-                            req.flash('success_msg','You are now register and can now log in');
-                            res.redirect('/users/login');
+                    //hash password
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                            if (err) throw err;
+
+                            //set password to hash
+                            newUser.password = hash;
+                            newUser.save()
+                                .then(user => {
+                                    req.flash('success_msg', 'You are now register and can now log in');
+                                    res.redirect('/users/login');
+                                })
+                                .catch(err => console.log(err));
                         })
-                        .catch(err => console.log(err));
-                    })
-                });
-           }
+                    });
+                }
 
-        });
+            });
     }
 });
 
 //login handle
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-      successRedirect: '/main',
-      failureRedirect: '/users/login',
-      failureFlash: true
+        successRedirect: '/main',
+        failureRedirect: '/users/login',
+        failureFlash: true
     })(req, res, next);
-  });
+});
 
 //logout handle
 router.get('/logout', (req, res, next) => {

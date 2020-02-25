@@ -14,9 +14,9 @@ const db = require('./config/keys').MongoURI;
 
 //connect to mongo
 mongoose.connect(db, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-})
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
@@ -59,6 +59,6 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/packs', require('./routes/packages'));
 
-const PORT = process.env.PORT || 3600;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));

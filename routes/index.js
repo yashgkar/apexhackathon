@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
+const Booking = require('../models/NewBooking.js');
 
 //welcome page
 router.get('/', (req, res, next) => {
@@ -17,8 +18,38 @@ router.get('/packs', ensureAuthenticated, (req, res, next) => {
     res.render('packages')
 });
 
-router.get('/packs:id', ensureAuthenticated, (req, res, next) => {
-    
+router.post('/packs:id', ensureAuthenticated, (req, res, next) => {
+    var plan = req.params.id;
+    const { date, loca, totalperson } = req.body;
+    let errors = [];
+
+    if (!date || !loca || !totalperson) {
+        errors.push({ msg: 'Please enter all fields' });
+    }
+
+    /*if (date <= Date.now) {
+        errors.push({ msg: 'Date must be valid!' });
+    }*/
+    if (errors.length > 0) {
+        res.render('packages', {
+            errors
+        });
+    } else {
+        const newBooking = new Booking({
+            name: req.user.name,
+            email: req.user.email,
+            date,
+            location: loca,
+            people: totalperson,
+            plan
+        });
+        newBooking.save().then(user => {
+                req.flash('success_msg', 'Your Booking is confirmed and your will get a confirmation call for the same');
+                res.redirect('/main');
+            })
+            .catch(err => console.log(err));
+    }
+
 });
 
 
